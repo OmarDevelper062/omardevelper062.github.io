@@ -1,0 +1,607 @@
+body {
+    /* ضع رابط الصورة المباشر مكان الرابط التالي */
+    background-image: url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=1920&auto=format&fit=crop');
+    background-size: cover;          /* لتغطية الشاشة بالكامل */
+    background-position: center;     /* لتوسيط الصورة */
+    background-attachment: fixed;    /* تثبيت الخلفية عند النزول بالصفحة */
+    margin: 0;
+    direction: rtl;
+}
+
+/* طبقة شفافة فوق الصورة لكي تبقى النصوص واضحة ومقروءة تماماً */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.85); /* لون أبيض شفاف (أو أسود rgba(0,0,0,0.8) لو أردت خلفية داكنة) */
+    z-index: -1;
+}
+/* إعدادات عامة وتثبيت الخطوط وتجنب مشاكل التمرير الأفقي في الهواتف */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+body {
+    background-color: #f4f7f6;
+    color: #333;
+    direction: rtl;
+    line-height: 1.6;
+    -webkit-text-size-adjust: 100%; /* منع أجهزة الآيفون من تغيير حجم الخط تلقائياً */
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* الأزرار العامة */
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    text-align: center;
+}
+
+.primary-btn {
+    background-color: #2563eb;
+    color: white;
+}
+
+.primary-btn:hover {
+    background-color: #1d4ed8;
+}
+
+.youtube-btn {
+    background-color: #dc2626;
+    color: white;
+}
+
+.full-width {
+    width: 100%;
+}
+
+/* 1. شريط التنقل العلوي (Header) */
+header {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+}
+
+.logo {
+    font-size: 19px;
+    font-weight: bold;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo i {
+    color: #2563eb;
+}
+
+.logo span {
+    color: #64748b;
+    font-size: 16px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+    align-items: center;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #475569;
+    font-weight: 600;
+    font-size: 15px;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover, nav ul li a.active {
+    color: #2563eb;
+}
+
+.highlight-nav {
+    color: #d97706 !important;
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: #1e293b;
+    padding: 5px;
+}
+
+/* 2. قسم الصفحة الرئيسية (Hero Section) */
+.hero-section {
+    padding: 50px 0;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: white;
+}
+
+.hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.hero-text {
+    flex: 1;
+}
+
+.hero-text h1 {
+    font-size: 34px;
+    margin-bottom: 15px;
+    line-height: 1.3;
+}
+
+.hero-text h1 .highlight {
+    color: #60a5fa;
+}
+
+.hero-text p {
+    font-size: 16px;
+    color: #94a3b8;
+    margin-bottom: 25px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.hero-image {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#profile-img {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #3b82f6;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.channel-badge {
+    margin-top: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* تنسيق عام للأقسام */
+.section {
+    padding: 50px 0;
+}
+
+.bg-light {
+    background-color: #ffffff;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 28px;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.section-subtitle {
+    text-align: center;
+    color: #64748b;
+    margin-bottom: 35px;
+    font-size: 15px;
+    padding: 0 10px;
+}
+
+/* 3. قسم الدورة الشاملة المدفوعة */
+.paid-course-card {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 14px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 25px 20px;
+    position: relative;
+    border: 2px solid #e2e8f0;
+}
+
+.course-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: #d97706;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.paid-course-card h3 {
+    color: #1e293b;
+    margin-bottom: 12px;
+    font-size: 20px;
+    padding-left: 70px; /* لكي لا يتداخل النص مع البادج على الشاشات الصغيرة */
+}
+
+.course-description {
+    color: #475569;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+.course-features {
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+.course-features li {
+    margin-bottom: 10px;
+    color: #334155;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.course-features li i {
+    color: #16a34a;
+    flex-shrink: 0;
+}
+
+.price-box {
+    background: #dcfce7;
+    border: 1px solid #bbf7d0;
+    padding: 12px 18px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price-label {
+    font-size: 16px;
+    color: #166534;
+    font-weight: bold;
+}
+
+.price-value {
+    font-size: 24px;
+    color: #14532d;
+    font-weight: bold;
+}
+
+/* 4. كورسات رياضيات (شبكة الفيديوهات) */
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.course-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.course-info {
+    padding: 18px;
+}
+
+.course-info h3 {
+    font-size: 17px;
+    color: #1e293b;
+    margin-bottom: 8px;
+    line-height: 1.4;
+    /* إزالة الارتفاع الثابت لكي لا يقتطع النص في الهواتف */
+    min-height: auto; 
+}
+
+.course-info p {
+    color: #64748b;
+    font-size: 13px;
+    margin-bottom: 12px;
+    line-height: 1.4;
+    min-height: auto;
+}
+
+.watch-link {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+
+/* 5. قسم حل امتحانات سابقة */
+.coming-soon-box {
+    background: white;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    border-radius: 14px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    text-align: center;
+}
+
+.coming-soon-box i {
+    color: #d97706;
+    margin-bottom: 12px;
+}
+
+.coming-soon-box h3 {
+    font-size: 20px;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.coming-soon-box p {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.coming-soon-box button[disabled] {
+    background-color: #cbd5e1;
+    cursor: not-allowed;
+}
+
+/* 6. قسم مراجعة ما قبل الامتحان والاستشارة */
+.consultation-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: center;
+    background: white;
+    padding: 30px 20px;
+    border-radius: 14px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+}
+
+.consultation-info h2 {
+    font-size: 24px;
+    color: #1e293b;
+    margin-bottom: 12px;
+}
+
+.consultation-info p {
+    color: #64748b;
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+.features-list {
+    list-style: none;
+}
+
+.features-list li {
+    margin-bottom: 10px;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.features-list li i {
+    color: #2563eb;
+    flex-shrink: 0;
+}
+
+.consultation-form-card h3 {
+    font-size: 18px;
+    color: #1e293b;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #334155;
+    font-size: 13px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 16px; /* 16px يمنع زووم الآيفون التلقائي المزعج عند التركيز على الحقل */
+    outline: none;
+    background-color: #fff;
+}
+
+.form-group input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* 7. التذييل (Footer) */
+footer {
+    background-color: #0f172a;
+    color: #94a3b8;
+    padding: 25px 0;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.social-links a {
+    color: white;
+    font-size: 18px;
+    background: rgba(255, 255, 255, 0.1);
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+/* التجاوب الدقيق مع الهواتف الذكية ( iPhones & Mobile devices ) */
+@media (max-width: 992px) {
+    .hero-content, .consultation-wrapper {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+    }
+
+    .features-list li {
+        justify-content: center;
+    }
+
+    .course-features li {
+        justify-content: flex-start; /* لتبقى مريحة للعين في الموبايل */
+    }
+
+    /* تحسين القائمة المنسدلة للآيفون والهواتف */
+    nav ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 70px;
+        right: 0;
+        width: 100%;
+        background: #ffffff;
+        padding: 20px 0;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    nav ul.active {
+        display: flex;
+    }
+
+    nav ul li {
+        width: 100%;
+        padding: 8px 0;
+    }
+
+    nav ul li a {
+        display: block;
+        font-size: 17px;
+        padding: 5px 0;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .paid-course-card {
+        padding: 20px 15px;
+    }
+
+    .paid-course-card h3 {
+        padding-left: 0;
+        margin-top: 25px; /* إعطاء مساحة للبَادج لكي لا يتداخل مع العنوان في شاشات الموبايل الصغيرة */
+    }
+
+    .course-badge {
+        top: 15px;
+        left: 15px;
+    }
+/* تنسيق شارة قيد التطوير */
+.dev-notice-badge {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.dev-notice-badge i {
+    color: #ffc107;
+}
+
+
+}
