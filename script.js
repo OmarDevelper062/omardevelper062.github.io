@@ -4,64 +4,43 @@ let pendingEmail = "";
 let pendingPassword = "";
 let pendingName = "";
 
-// ================= نظام فتح وإغلاق نافذة الحسابات =================
-function openAuthModal(mode) {
-    const modal = document.getElementById('authModal');
-    const title = document.getElementById('modalTitle');
-    const btn = document.getElementById('authSubmitBtn');
-    const nameFieldContainer = document.getElementById('authNameContainer');
-    
-    if (modal) {
-        modal.style.display = 'flex';
-        
-        // إعادة ضبط النافذة دائماً للحالة الافتراضية عند فتحها
-        const authForm = document.getElementById('authForm');
-        const otpContainer = document.getElementById('otpModalContainer');
-        if (authForm) {
-            authForm.style.display = 'block';
-            authForm.reset();
-        }
-        if (otpContainer) otpContainer.style.display = 'none';
+// ================= نظام التبديل والتحكم في نافذة القفل الإجبارية =================
+function switchMandatoryTab(mode) {
+    const nameContainer = document.getElementById('mandNameContainer');
+    const submitBtn = document.getElementById('mandSubmitBtn');
+    const tabLogin = document.getElementById('tabLoginBtn');
+    const tabRegister = document.getElementById('tabRegisterBtn');
+    const otpContainer = document.getElementById('mandOtpContainer');
+    const formElem = document.getElementById('mandatoryAuthForm');
 
-        if (mode === 'login') {
-            title.innerText = 'تسجيل دخول الطلاب';
-            btn.innerText = 'دخول';
-            btn.setAttribute('data-mode', 'login');
-            if (nameFieldContainer) nameFieldContainer.style.display = 'none'; // إخفاء حقل الاسم عند تسجيل الدخول
-        } else {
-            title.innerText = 'تسجيل حساب طالب جديد';
-            btn.innerText = 'إنشاء الحساب (إرسال الرمز)';
-            btn.setAttribute('data-mode', 'register');
-            if (nameFieldContainer) nameFieldContainer.style.display = 'block'; // إظهار حقل الاسم عند التسجيل الجديد
-        }
-    }
-}
+    if (otpContainer) otpContainer.style.display = 'none';
+    if (formElem) formElem.style.display = 'block';
 
-function closeAuthModal() {
-    const modal = document.getElementById('authModal');
-    if (modal) {
-        modal.style.display = 'none';
-        const authForm = document.getElementById('authForm');
-        const otpContainer = document.getElementById('otpModalContainer');
-        if (authForm) {
-            authForm.style.display = 'block';
-            authForm.reset();
+    if (mode === 'login') {
+        if (nameContainer) nameContainer.style.display = 'none';
+        if (submitBtn) {
+            submitBtn.textContent = 'تسجيل الدخول';
+            submitBtn.setAttribute('data-mode', 'login');
+            submitBtn.disabled = false;
         }
-        if (otpContainer) otpContainer.style.display = 'none';
-    }
-}
-
-window.onclick = function(event) {
-    const modal = document.getElementById('authModal');
-    if (event.target === modal) {
-        closeAuthModal();
+        if (tabLogin) { tabLogin.style.background = '#007bff'; tabLogin.style.color = 'white'; }
+        if (tabRegister) { tabRegister.style.background = 'transparent'; tabRegister.style.color = '#64748b'; }
+    } else {
+        if (nameContainer) nameContainer.style.display = 'block';
+        if (submitBtn) {
+            submitBtn.textContent = 'إرسال رمز التحقق والتسجيل';
+            submitBtn.setAttribute('data-mode', 'register');
+            submitBtn.disabled = false;
+        }
+        if (tabRegister) { tabRegister.style.background = '#007bff'; tabRegister.style.color = 'white'; }
+        if (tabLogin) { tabLogin.style.background = 'transparent'; tabLogin.style.color = '#64748b'; }
     }
 }
 
 
-// ================= تسجيل الدخول بواسطة جوجل =================
+// ================= تسجيل الدخول بواسطة جوجل (الإلزامي) =================
 window.addEventListener('DOMContentLoaded', () => {
-    const googleBtn = document.getElementById('googleSignInBtn');
+    const googleBtn = document.getElementById('mandGoogleBtn');
     if (googleBtn) {
         googleBtn.addEventListener('click', function() {
             const provider = new firebase.auth.GoogleAuthProvider();
@@ -69,9 +48,9 @@ window.addEventListener('DOMContentLoaded', () => {
             auth.signInWithPopup(provider)
                 .then((result) => {
                     const user = result.user;
-                    alert(`أهلاً بك يا بطل (${user.displayName || user.email})! تم تسجيل الدخول بنجاح.`);
-                    closeAuthModal();
-                    updateStudentUI(user.displayName || user.email.split('@')[0]);
+                    const displayName = user.displayName || user.email.split('@')[0];
+                    alert(`أهلاً بك يا بطل (${displayName})! تم تسجيل الدخول بنجاح.`);
+                    // مراقب الحالة onAuthStateChanged سيقوم بفتح الموقع تلقائياً
                 })
                 .catch((error) => {
                     alert('فشل تسجيل الدخول بواسطة جوجل: ' + error.message);
@@ -81,20 +60,20 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// ================= معالجة نموذج التسجيل والدخول بالإيميل (مع نظام الـ OTP) =================
-const authForm = document.getElementById('authForm');
-if (authForm) {
-    authForm.addEventListener('submit', function(e) {
+// ================= معالجة نموذج التسجيل والدخول الإلزامي بالإيميل (مع نظام الـ OTP) =================
+const mandatoryAuthForm = document.getElementById('mandatoryAuthForm');
+if (mandatoryAuthForm) {
+    mandatoryAuthForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        const emailInput = document.getElementById('authEmail');
-        const passwordInput = document.getElementById('authPassword');
-        const nameInput = document.getElementById('authName');
+        const emailInput = document.getElementById('mandEmail');
+        const passwordInput = document.getElementById('mandPassword');
+        const nameInput = document.getElementById('mandName');
         
         const email = emailInput ? emailInput.value : '';
         const password = passwordInput ? passwordInput.value : '';
         const name = nameInput ? nameInput.value.trim() : '';
         
-        const btn = document.getElementById('authSubmitBtn');
+        const btn = document.getElementById('mandSubmitBtn');
         const mode = btn ? btn.getAttribute('data-mode') : '';
 
         if (mode === 'register') {
@@ -109,7 +88,6 @@ if (authForm) {
             pendingPassword = password;
             pendingName = name;
 
-            // إظهار حالة جاري الإرسال على الزر وتنزيل تفعيله مؤقتاً
             btn.innerText = 'جاري إرسال الرمز لبريدك...';
             btn.disabled = true;
 
@@ -123,8 +101,8 @@ if (authForm) {
             };
 
             if (typeof emailjs === 'undefined') {
-                alert('خطأ: لم يتم تحميل مكتبة الإرسال بشكل صحيح في صفحة HTML.');
-                btn.innerText = 'إنشاء الحساب (إرسال الرمز)';
+                alert('خطأ: لم يتم تحميل مكتبة الإرسال بشكل صحيح.');
+                btn.innerText = 'إرسال رمز التحقق والتسجيل';
                 btn.disabled = false;
                 return;
             }
@@ -135,18 +113,18 @@ if (authForm) {
                     console.log('SUCCESS!', response.status, response.text);
                     alert('تم إرسال رمز التحقق بنجاح إلى بريدك الإلكتروني! تحقق من صندوق الوارد (أو البريد العشوائي Spam).');
                     
-                    const formElem = document.getElementById('authForm');
-                    const otpElem = document.getElementById('otpModalContainer');
+                    const formElem = document.getElementById('mandatoryAuthForm');
+                    const otpElem = document.getElementById('mandOtpContainer');
                     if (formElem) formElem.style.display = 'none';
                     if (otpElem) otpElem.style.display = 'block';
                     
-                    btn.innerText = 'إنشاء الحساب (إرسال الرمز)';
+                    btn.innerText = 'إرسال رمز التحقق والتسجيل';
                     btn.disabled = false;
                 })
                 .catch((error) => {
                     console.error('FAILED...', error);
                     alert('فشل إرسال البريد الإلكتروني. الخطأ: ' + (error.text || JSON.stringify(error)));
-                    btn.innerText = 'إنشاء الحساب (إرسال الرمز)';
+                    btn.innerText = 'إرسال رمز التحقق والتسجيل';
                     btn.disabled = false;
                 });
 
@@ -157,8 +135,6 @@ if (authForm) {
                     const user = userCredential.user;
                     const displayName = user.displayName || user.email.split('@')[0];
                     alert(`مرحباً بك يا ${displayName}! تم تسجيل الدخول بنجاح.`);
-                    closeAuthModal();
-                    updateStudentUI(displayName);
                 })
                 .catch((error) => {
                     alert('البريد الإلكتروني أو كلمة المرور غير صحيحة: ' + error.message);
@@ -168,11 +144,11 @@ if (authForm) {
 }
 
 
-// ================= زر التحقق من الرمز المدخل (OTP) =================
-const verifyOtpBtn = document.getElementById('verifyOtpBtn');
-if (verifyOtpBtn) {
-    verifyOtpBtn.addEventListener('click', function() {
-        const userEnteredOtp = document.getElementById('otpInputCode').value.trim();
+// ================= زر التحقق من الرمز المدخل (OTP) في النافذة الإلزامية =================
+const mandVerifyOtpBtn = document.getElementById('mandVerifyOtpBtn');
+if (mandVerifyOtpBtn) {
+    mandVerifyOtpBtn.addEventListener('click', function() {
+        const userEnteredOtp = document.getElementById('mandOtpCode').value.trim();
 
         if (userEnteredOtp === generatedOtp) {
             // الرمز صحيح! إنشاء الحساب في Firebase
@@ -185,8 +161,6 @@ if (verifyOtpBtn) {
                         displayName: pendingName
                     }).then(() => {
                         alert(`تم تأكيد الحساب وإنشاؤه بنجاح يا ${pendingName}! أهلاً بك.`);
-                        closeAuthModal();
-                        updateStudentUI(pendingName);
                     });
                 })
                 .catch((error) => {
@@ -199,32 +173,37 @@ if (verifyOtpBtn) {
 }
 
 
-// ================= تحديث واجهة الموقع باسم الطالب =================
-function updateStudentUI(displayName) {
-    const authActions = document.querySelector('.auth-actions');
-    if (authActions) {
-        authActions.innerHTML = `
-            <span style="font-size: 0.95rem; font-weight: bold; color: #007bff; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${displayName}">🎓 أهلاً، ${displayName}</span>
-            <button type="button" onclick="studentLogout()" style="padding: 6px 12px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.85rem; font-weight: bold;">خروج</button>
-        `;
-    }
-}
-
-
-// مراقبة حالة الجلسة
+// ================= مراقبة حالة الجلسة وإلغاء قفل الموقع عند الدخول =================
 auth.onAuthStateChanged((user) => {
     if (user) {
-        const displayName = user.displayName || user.email.split('@')[0];
-        updateStudentUI(displayName);
+        // المستخدم مسجل: إزالة القفل وعرض الموقع
+        document.body.classList.remove('locked-body');
+        document.body.classList.add('logged-in');
+        const modal = document.getElementById('mandatoryAuthModal');
+        if (modal) modal.style.display = 'none';
+    } else {
+        // المستخدم غير مسجل: تفعيل القفل وعرض نافذة الدخول الإلزامية
+        document.body.classList.add('locked-body');
+        document.body.classList.remove('logged-in');
+        const modal = document.getElementById('mandatoryAuthModal');
+        if (modal) modal.style.display = 'flex';
     }
 });
 
 
-// تسجيل الخروج
-function studentLogout() {
+// زر تسجيل الخروج
+function logoutUser() {
     auth.signOut().then(() => {
         location.reload();
     });
+}
+
+// للتخطي المؤقت للتجربة المحلية
+function bypassLoginForTesting() {
+    document.body.classList.remove('locked-body');
+    document.body.classList.add('logged-in');
+    const modal = document.getElementById('mandatoryAuthModal');
+    if (modal) modal.style.display = 'none';
 }
 
 
@@ -234,7 +213,7 @@ if (subscribeBtn) {
     subscribeBtn.addEventListener('click', function(e) {
         e.preventDefault();
         const phoneNumber = "97450137538"; 
-        const text = "مرحباً يا استاذ عمر، أرغب في الاشتراك في الدورة الشاملة للفصل الأول (120 ريال قطري).";
+        const text = "مرحباً يا استاذ عمر، أرغب في الاشتراك في الدورة الشاملة للفصل الأول (60 ريال قطري).";
         const encodedURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(text)}`;
         window.open(encodedURL, '_blank');
     });

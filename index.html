@@ -6,7 +6,7 @@
     <title>Omar Y7elha | عمر يحلّه - رياضيات 12 علمي وتكنولوجي</title>
     
     <!-- شعار الموقع في تبويب المتصفح -->
-    <link rel="icon" type="image/png" href="https://omarmath.netlify.app/logo.png">
+    <link rel="icon" type="image/png" href="https://yt3.ggpht.com/eVvMofMFOV74uYi5lRKxsPILy2wqevVydZwQiZExcdNOC9rcZxsmOVvrxx4-Pn2bbLcfHbysBSs=s600-c-k-c0x00ffffff-no-rj-rp-mo">
 
     <link rel="stylesheet" href="style.css">
     <!-- مكتبة الأيقونات FontAwesome -->
@@ -43,318 +43,420 @@
       }
       const auth = firebase.auth();
     </script>
+
+    <!-- سكريبت التحقق الإلزامي من تسجيل الدخول -->
+    <style>
+        /* إخفاء المحتوى تماماً ومنع التمرير حتى يتم تسجيل الدخول */
+        body.locked-body {
+            overflow: hidden;
+        }
+        #siteContentWrapper {
+            filter: blur(8px);
+            pointer-events: none;
+            user-select: none;
+            transition: filter 0.4s ease;
+        }
+        body.logged-in #siteContentWrapper {
+            filter: blur(0);
+            pointer-events: auto;
+            user-select: auto;
+        }
+    </style>
 </head>
-<body>
+<body class="locked-body">
 
-    <!-- شريط التنقل العلوي -->
-    <header>
-        <div class="container nav-container">
-            <div class="logo" style="display: flex; align-items: center; gap: 10px;">
-                <a href="#home" style="display: flex; align-items: center; text-decoration: none; color: inherit; gap: 8px;">
-                    <img src="https://omarmath.netlify.app/logo.png" alt="Omar Y7elha Logo" style="height: 40px; width: auto; object-fit: contain; border-radius: 6px;">
-                    <span style="font-weight: bold; font-size: 1.2rem;">Omar Y7elha <span style="font-weight: normal; color: #666;">| عمر يحلّه</span></span>
-                </a>
-            </div>
-
-            <nav>
-                <ul>
-                    <li><a href="#home" class="active">الصفحة الرئيسية</a></li>
-                    <li><a href="#courses">كورسات رياضيات</a></li>
-                    <li><a href="#paid-course" class="highlight-nav">الدورة الشاملة</a></li>
-                    <li><a href="#exams">حل امتحانات سابقة</a></li>
-                    <li><a href="#consultation">مراجعة ما قبل الامتحان</a></li>
-                </ul>
-            </nav>
-
-            <div class="auth-actions" style="display: flex; gap: 10px; align-items: center;">
-                <button type="button" onclick="openAuthModal('login')" style="padding: 8px 15px; border: 1px solid #007bff; background: transparent; color: #007bff; border-radius: 5px; cursor: pointer; font-weight: bold;">تسجيل الدخول</button>
-                <button type="button" onclick="openAuthModal('register')" style="padding: 8px 15px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">حساب جديد</button>
-            </div>
-
-            <div class="menu-toggle" id="mobile-menu">
-                <i class="fa-solid fa-bars"></i>
-            </div>
-        </div>
-    </header>
-
-    <!-- قسم الصفحة الرئيسية -->
-    <section id="home" class="hero-section">
-        <div class="container hero-content" style="display: block; text-align: center;">
-            <div class="hero-text" style="max-width: 800px; margin: 0 auto;">
-                <h1>أهلاً بكم في موقع <span class="highlight">عمر يحلّه</span></h1>
-                <p>منصتكم المخصصة لشرح وتبسيط منهج الرياضيات للثانوية العامة (الصف الثاني عشر - علمي وتكنولوجي) وفقاً للمنهج القطري.</p>
-                <div class="hero-buttons" style="justify-content: center; display: flex; gap: 15px; margin-top: 20px;">
-                    <a href="#paid-course" class="btn primary-btn">احجز الدورة الشاملة</a>
-                    <a href="https://www.youtube.com/@OmarMathematics-u3b" target="_blank" class="btn youtube-btn">
-                        <i class="fa-brands fa-youtube"></i> زيارة القناة الرسمية
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- قسم دورة الرياضيات للثانوية العامة (المأجورة) -->
-    <section id="paid-course" class="section bg-light">
-        <div class="container">
-            <h2 class="section-title">دورة الرياضيات للثانوية العامة</h2>
-            <p class="section-subtitle">استعد لاختباراتك بقوة مع الشرح المكثف والحلول النموذجية للمنهج بالكامل</p>
+    <!-- نافذة فرض تسجيل الدخول الإلزامية (تظهر أول ما يفتح الطالب الموقع) -->
+    <div id="mandatoryAuthModal" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 15px;">
+        <div style="background: white; padding: 30px; border-radius: 12px; width: 100%; max-width: 420px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); text-align: right; position: relative;">
             
-            <div class="paid-courses-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-                
-                <!-- الفصل الأول (متاح) -->
-                <div class="paid-course-card">
-                    <div class="course-badge">الفصل الأول</div>
-                    <div class="course-content">
-                        <h3>الدورة الشاملة - الفصل الأول (12 علمي وتكنولوجي)</h3>
-                        <p class="course-description">تشمل الدورة شرحاً مفصلاً لكافة الوحدات، تجميعات لأهم الأسئلة المتوقعة، وطرق حل المشكلات الرياضية بأسهل الطرق الممكنة.</p>
-                        
-                        <ul class="course-features">
-                            <li><i class="fa-solid fa-check-circle"></i> شرح كامل ومبسط لجميع دروس منهج الفصل الأول</li>
-                            <li><i class="fa-solid fa-check-circle"></i> حل نماذج اختبارات سابقة وتدريبات مكثفة</li>
-                            <li><i class="fa-solid fa-check-circle"></i> متابعة ودعم مستمر للإجابة على جميع الاستفسارات</li>
-                        </ul>
-
-                        <div class="price-box">
-                            <span class="price-label">سعر الاشتراك:</span>
-                            <span class="price-value">120 ر.ق</span>
-                        </div>
-
-                        <a href="#" id="subscribeBtn" class="btn primary-btn full-width">
-                            <i class="fa-brands fa-whatsapp"></i> اشترك الآن في الفصل الأول (120 ريال)
-                        </a>
-                    </div>
-                </div>
-
-                <!-- الفصل الثاني (مغلق) -->
-                <div class="paid-course-card locked-card" style="opacity: 0.8; position: relative;">
-                    <div class="course-badge" style="background-color: #6c757d;">الفصل الثاني</div>
-                    <div class="course-content">
-                        <h3>الدورة الشاملة - الفصل الثاني (12 علمي وتكنولوجي)</h3>
-                        <p class="course-description">سيتم فتح التسجيل في الدورة الشاملة لشرح منهج الفصل الثاني في موعده المحدد.</p>
-                        
-                        <ul class="course-features">
-                            <li><i class="fa-solid fa-lock"></i> شرح كامل ومبسط لدورة الفصل الثاني</li>
-                            <li><i class="fa-solid fa-lock"></i> نماذج واختبارات متوقعة</li>
-                            <li><i class="fa-solid fa-lock"></i> متابعة ومراجعة مكثفة</li>
-                        </ul>
-
-                        <div class="price-box" style="filter: blur(1px);">
-                            <span class="price-label">سعر الاشتراك:</span>
-                            <span class="price-value">-- ر.ق</span>
-                        </div>
-
-                        <button class="btn disabled-btn full-width" disabled style="background-color: #6c757d; color: #fff; cursor: not-allowed; border: none; padding: 12px; width: 100%; border-radius: 5px; font-weight: bold;">
-                            <i class="fa-solid fa-lock"></i> التسجيل مغلق حالياً (قريباً)
-                        </button>
-                    </div>
-                </div>
-
+            <div style="text-align: center; margin-bottom: 20px;">
+                <img src="https://yt3.ggpht.com/eVvMofMFOV74uYi5lRKxsPILy2wqevVydZwQiZExcdNOC9rcZxsmOVvrxx4-Pn2bbLcfHbysBSs=s600-c-k-c0x00ffffff-no-rj-rp-mo" alt="Logo" style="height: 50px; margin-bottom: 10px; border-radius: 8px;">
+                <h3 style="color: #1e293b; font-size: 1.3rem; margin-bottom: 5px;">مرحباً بك في منصة عمر يحلّه</h3>
+                <p style="color: #64748b; font-size: 0.85rem;">يجب تسجيل الدخول أو إنشاء حساب جديد لمتابعة تصفح الموقع والدروس.</p>
             </div>
-        </div>
-    </section>
 
-    <!-- قسم كورسات رياضيات (المجانية) -->
-    <section id="courses" class="section">
-        <div class="container">
-            <h2 class="section-title">كورسات رياضيات المجانية</h2>
-            <p class="section-subtitle">شاهد أحدث شروحات منهج الصف 12 علمي وتكنولوجي مباشرة من قناتي على يوتيوب</p>
+            <!-- أزرار التبديل بين تسجيل الدخول وحساب جديد داخل نافذة الإجبار -->
+            <div style="display: flex; gap: 10px; margin-bottom: 20px; background: #f1f5f9; padding: 4px; border-radius: 8px;">
+                <button type="button" id="tabLoginBtn" onclick="switchMandatoryTab('login')" style="flex: 1; padding: 8px; border: none; background: #007bff; color: white; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.85rem; transition: 0.3s;">تسجيل الدخول</button>
+                <button type="button" id="tabRegisterBtn" onclick="switchMandatoryTab('register')" style="flex: 1; padding: 8px; border: none; background: transparent; color: #64748b; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.85rem; transition: 0.3s;">حساب جديد</button>
+            </div>
             
-            <div class="term-tabs" style="display: flex; justify-content: center; gap: 15px; margin-bottom: 30px;">
-                <button class="term-tab active" style="padding: 10px 25px; border-radius: 25px; border: 2px solid #007bff; background: #007bff; color: white; cursor: pointer; font-weight: bold;">
-                    <i class="fa-solid fa-book-open"></i> الفصل الأول
-                </button>
-                <button class="term-tab disabled" style="padding: 10px 25px; border-radius: 25px; border: 2px solid #ccc; background: #e9ecef; color: #6c757d; cursor: not-allowed; font-weight: bold;" title="مغلق حالياً">
-                    <i class="fa-solid fa-lock"></i> الفصل الثاني (مغلق)
-                </button>
-            </div>
-
-            <div class="courses-grid" id="youtube-videos-container">
-                <div class="course-card">
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/fH0p58o2VGY" title="شرح منهج الرياضيات - عمر يحلّه" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                    <div class="course-info">
-                        <h3>😲 التكامل غير المحدود… أسهل مما تتخيل! #1</h3>
-                        <p>شرح تفصيلي ومبسط لتكامل غير المحدود وقواعده الأساسية.</p>
-                        <a href="https://youtu.be/fH0p58o2VGY" target="_blank" class="watch-link">شاهد على يوتيوب <i class="fa-solid fa-arrow-left"></i></a>
-                    </div>
-                </div>
-
-                <div class="course-card">
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/4fLWk6EayRw" title="شرح منهج الرياضيات - عمر يحلّه" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                    <div class="course-info">
-                        <h3>شرح شامل لقواعد تكامل الدالة الأسية e | رياضيات</h3>
-                        <p>فهم وتطبيق قواعد تكامل الدوال الأسية (الأساس الطبيعي e).</p>
-                        <a href="https://youtu.be/4fLWk6EayRw" target="_blank" class="watch-link">شاهد على يوتيوب <i class="fa-solid fa-arrow-left"></i></a>
-                    </div>
-                </div>
-
-                <div class="course-card">
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/pLQZ_gCFRjs" title="شرح منهج الرياضيات - عمر يحلّه" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                    <div class="course-info">
-                        <h3>التكامل بالتعويض… الحل الذكي للمسائل المعقّدة 🔥</h3>
-                        <p>طريقة التكامل بالتعويض والتعامل مع الجذور والأسس بذكاء.</p>
-                        <a href="https://youtu.be/pLQZ_gCFRjs" target="_blank" class="watch-link">شاهد على يوتيوب <i class="fa-solid fa-arrow-left"></i></a>
-                    </div>
-                </div>
-
-                <div class="course-card">
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/E6wJ9TZ4y-w" title="شرح منهج الرياضيات - عمر يحلّه" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                    <div class="course-info">
-                        <h3>!! تكامل بالتعويض - الدوال المثلثية</h3>
-                        <p>تطبيق التكامل بالتعويض على الدوال المثلثية مثل السان والتان.</p>
-                        <a href="https://youtu.be/E6wJ9TZ4y-w" target="_blank" class="watch-link">شاهد على يوتيوب <i class="fa-solid fa-arrow-left"></i></a>
-                    </div>
-                </div>
-
-                <div class="course-card">
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/xeaS8W_GLe0" title="شرح منهج الرياضيات - عمر يحلّه" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                    <div class="course-info">
-                        <h3>التكامل بالأجزاء… مش صعب زي ما تتخيل!</h3>
-                        <p>شرح مبسط لقاعدة التكامل بالأجزاء وحاصل ضرب دالتين.</p>
-                        <a href="https://youtu.be/xeaS8W_GLe0" target="_blank" class="watch-link">شاهد على يوتيوب <i class="fa-solid fa-arrow-left"></i></a>
-                    </div>
-                </div>
-
-                <div class="course-card">
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/Cl9cBI_BcYg" title="شرح منهج الرياضيات - عمر يحلّه" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                    <div class="course-info">
-                        <h3>درس التكامل بالأجزاء بطريقة ذكية 😎</h3>
-                        <p>استخدام طريقة الجدول لحل مسائل التكامل بالأجزاء للدوال المثلثية.</p>
-                        <a href="https://youtu.be/Cl9cBI_BcYg" target="_blank" class="watch-link">شاهد على يوتيوب <i class="fa-solid fa-arrow-left"></i></a>
-                    </div>
-                </div>
-
-                <div class="course-card">
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/vco1EWeFXxw" title="شرح منهج الرياضيات - عمر يحلّه" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                    <div class="course-info">
-                        <h3>حل مسائل عن الوحدة الرابعة تكامل الغير محدود #1</h3>
-                        <p>مراجعة وحل مجموعة من المسائل المتنوعة على الوحدة الرابعة.</p>
-                        <a href="https://youtu.be/vco1EWeFXxw" target="_blank" class="watch-link">شاهد على يوتيوب <i class="fa-solid fa-arrow-left"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- قسم حل امتحانات سابقة -->
-    <section id="exams" class="section bg-light">
-        <div class="container text-center">
-            <h2 class="section-title">حل امتحانات سابقة</h2>
-            <p class="section-subtitle">نماذج اختبارات قطر الوطنية السابقة محلولة ومفصلة خطوة بخطوة</p>
-            
-            <div class="coming-soon-box">
-                <i class="fa-solid fa-hourglass-half fa-3x"></i>
-                <h3>قريباً جداً</h3>
-                <p>سيتم تفعيل هذا القسم ورفع فيديوهات حل الامتحانات وتجميعات الأسئلة في فترة الامتحانات القادمة، تابعونا!</p>
-                <button class="btn primary-btn" disabled>قريباً في فترة الامتحانات</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- قسم مراجعة ما قبل الامتحان وطلب الاستشارة -->
-    <section id="consultation" class="section">
-        <div class="container">
-            <div class="consultation-wrapper">
-                <div class="consultation-info">
-                    <h2>مراجعة ما قبل الامتحان</h2>
-                    <p>هل لديك أسئلة صعبة لم تفهمها؟ هل تحتاج لمراجعة نهائية مركزة قبل دخول اختبار الرياضيات؟</p>
-                    <ul class="features-list">
-                        <li><i class="fa-solid fa-check"></i> إجابات سريعة ومخصصة لأسئلتك</li>
-                        <li><i class="fa-solid fa-check"></i> تجميعات أهم المسائل المتوقعة</li>
-                        <li><i class="fa-solid fa-check"></i> دعم كامل لمنهج قطر (علمي وتكنولوجي)</li>
-                    </ul>
-                </div>
-                
-                <div class="consultation-form-card">
-                    <h3>اطلب استشارة أو مساعدة في سؤال</h3>
-                    <form id="consultForm">
-                        <div class="form-group">
-                            <label for="name">الاسم الكامل</label>
-                            <input type="text" id="name" required placeholder="أدخل اسمك هنا">
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">رقم الهاتف</label>
-                            <input type="tel" id="phone" required placeholder="رقم الهاتف">
-                        </div>
-                        <button type="submit" class="btn primary-btn full-width">إرسال الطلب عبر الواتساب</button>
-                        <p id="formMessage" class="form-message" style="display: none;"></p>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- نافذة تسجيل الدخول وحساب جديد المنبثقة (Modal) -->
-    <div id="authModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
-        <div style="background: white; padding: 30px; border-radius: 10px; width: 100%; max-width: 400px; position: relative; text-align: right;">
-            <span onclick="closeAuthModal()" style="position: absolute; top: 15px; left: 15px; cursor: pointer; font-size: 20px; font-weight: bold;">&times;</span>
-            <h3 id="modalTitle" style="margin-bottom: 20px; color: #333;">تسجيل الدخول</h3>
-            
-            <form id="authForm">
-                <!-- حقل اسم المستخدم (يظهر فقط عند التسجيل الجديد) -->
-                <div class="form-group" id="authNameContainer" style="margin-bottom: 15px;">
-                    <label for="authName" style="display: block; margin-bottom: 5px;">اسم المستخدم (اسم الطالب)</label>
-                    <input type="text" id="authName" placeholder="مثال: عمر محمد" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            <form id="mandatoryAuthForm">
+                <!-- حقل اسم المستخدم (يظهر فقط عند اختيار حساب جديد) -->
+                <div class="form-group" id="mandNameContainer" style="display: none; margin-bottom: 15px;">
+                    <label for="mandName" style="display: block; margin-bottom: 5px; font-size: 0.85rem; color: #334155;">اسم المستخدم (اسم الطالب)</label>
+                    <input type="text" id="mandName" placeholder="مثال: عمر محمد" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
                 </div>
 
                 <div class="form-group" style="margin-bottom: 15px;">
-                    <label for="authEmail" style="display: block; margin-bottom: 5px;">البريد الإلكتروني</label>
-                    <input type="email" id="authEmail" required placeholder="example@domain.com" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <label for="mandEmail" style="display: block; margin-bottom: 5px; font-size: 0.85rem; color: #334155;">البريد الإلكتروني</label>
+                    <input type="email" id="mandEmail" required placeholder="example@domain.com" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
                 </div>
-                <div class="form-group" style="margin-bottom: 15px;">
-                    <label for="authPassword" style="display: block; margin-bottom: 5px;">كلمة المرور</label>
-                    <input type="password" id="authPassword" required placeholder="********" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="mandPassword" style="display: block; margin-bottom: 5px; font-size: 0.85rem; color: #334155;">كلمة المرور</label>
+                    <input type="password" id="mandPassword" required placeholder="********" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
                 </div>
                 
                 <!-- زر الإرسال -->
-                <button type="submit" class="btn primary-btn full-width" style="width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;" id="authSubmitBtn" data-mode="login">دخول</button>
+                <button type="submit" class="btn primary-btn full-width" style="width: 100%; padding: 11px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.95rem;" id="mandSubmitBtn" data-mode="login">تسجيل الدخول</button>
             </form>
 
-            <!-- التنبيه الخاص بعدم وصول البريد في الـ Spam (مضاف هنا أسفل أزرار/نماذج الإرسال) -->
-            <div style="margin-top: 12px; padding: 8px 10px; background: #fff3cd; border: 1px solid #ffeeba; border-radius: 6px; color: #856404; font-size: 0.8rem; line-height: 1.4; text-align: center;">
-                <i class="fa-solid fa-triangle-exclamation"></i> ملاحظة: إذا لم تجد رمز التحقق في صندوق الوارد (Inbox)، يرجى التحقق من قسم <strong>الرسائل غير المرغوب فيها (Spam)</strong>.
+            <!-- التنبيه الخاص بعدم وصول البريد في الـ Spam -->
+            <div style="margin-top: 15px; padding: 8px 10px; background: #fff3cd; border: 1px solid #ffeeba; border-radius: 6px; color: #856404; font-size: 0.78rem; line-height: 1.4; text-align: center;">
+                <i class="fa-solid fa-triangle-exclamation"></i> ملاحظة: إذا لم تجد رمز التحقق في صندوق الوارد، يرجى التحقق من قسم <strong>الرسائل غير المرغوب فيها (Spam)</strong>.
             </div>
 
-            <!-- نافذة إدخال رمز التحقق -->
-            <div id="otpModalContainer" style="display: none; margin-top: 15px; background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #ddd; text-align: center;">
-                <h4 style="margin-bottom: 10px; color: #333; font-size: 1rem;">أدخل رمز التحقق المرسل لبريدك</h4>
-                <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">تم إرسال رمز مكون من 6 أرقام إلى بريدك الإلكتروني.</p>
-                <input type="text" id="otpInputCode" placeholder="123456" maxlength="6" style="width: 80%; padding: 10px; text-align: center; font-size: 1.2rem; letter-spacing: 5px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
-                <button type="button" id="verifyOtpBtn" style="width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">تأكيد الرمز ودخول</button>
+            <!-- حاوية إدخال رمز التحقق OTP -->
+            <div id="mandOtpContainer" style="display: none; margin-top: 15px; background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #ddd; text-align: center;">
+                <h4 style="margin-bottom: 8px; color: #333; font-size: 0.95rem;">أدخل رمز التحقق المرسل لبريدك</h4>
+                <p style="font-size: 0.8rem; color: #666; margin-bottom: 10px;">تم إرسال رمز من 6 أرقام إلى بريدك الإلكتروني.</p>
+                <input type="text" id="mandOtpCode" placeholder="123456" maxlength="6" style="width: 80%; padding: 10px; text-align: center; font-size: 1.1rem; letter-spacing: 4px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
+                <button type="button" id="mandVerifyOtpBtn" style="width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">تأكيد الرمز ودخول</button>
             </div>
 
-            <!-- زر تسجيل الدخول بواسطة جوجل -->
+            <!-- تسجيل الدخول بجوجل -->
             <div style="margin-top: 15px; text-align: center;">
-                <button type="button" id="googleSignInBtn" style="width: 100%; padding: 10px; background: white; color: #444; border: 1px solid #ccc; border-radius: 5px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <button type="button" id="mandGoogleBtn" style="width: 100%; padding: 10px; background: white; color: #444; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 10px; transition: background 0.2s;">
                     <i class="fa-brands fa-google" style="color: #ea4335;"></i> المتابعة باستخدام جوجل
                 </button>
+            </div>
+
+            <!-- خيار التخطي المؤقت للتجارب المحلية -->
+            <div style="margin-top: 15px; text-align: center;">
+                <button type="button" onclick="bypassLoginForTesting()" style="background: none; border: none; color: #64748b; font-size: 0.75rem; cursor: pointer; text-decoration: underline;">تخطي مؤقت للتجربة</button>
             </div>
         </div>
     </div>
 
-    <!-- التذييل -->
-    <footer>
-        <div class="container footer-content">
-            <p>جميع الحقوق محفوظة &copy; 2026 - Omar Y7elha | عمر يحلّه</p>
-            <div class="social-links">
-                <a href="https://www.youtube.com/@OmarMathematics-u3b" target="_blank"><i class="fa-brands fa-youtube"></i></a>
-            </div>
-        </div>
-    </footer>
+    <!-- حاوية محتوى الموقع بالكامل -->
+    <div id="siteContentWrapper">
 
+        <!-- شريط التنقل العلوي -->
+        <header>
+            <div class="container nav-container">
+                <div class="logo" style="display: flex; align-items: center; gap: 8px;">
+                    <a href="#home" style="display: flex; align-items: center; text-decoration: none; color: inherit; gap: 6px;">
+                        <img src="https://yt3.ggpht.com/eVvMofMFOV74uYi5lRKxsPILy2wqevVydZwQiZExcdNOC9rcZxsmOVvrxx4-Pn2bbLcfHbysBSs=s600-c-k-c0x00ffffff-no-rj-rp-mo" alt="Omar Y7elha Logo" style="height: 32px; width: auto; object-fit: contain; border-radius: 4px;">
+                        <span style="font-weight: bold; font-size: 1.05rem;">Omar Y7elha <span style="font-weight: normal; color: #666; font-size: 0.9rem;">| عمر يحلّه</span></span>
+                    </a>
+                </div>
+
+                <nav>
+                    <ul>
+                        <li><a href="#home" class="active">الصفحة الرئيسية</a></li>
+                        <li><a href="#courses">كورسات رياضيات</a></li>
+                        <li><a href="#paid-course" class="highlight-nav">الدورة الشاملة</a></li>
+                        <li><a href="#exams">حل امتحانات سابقة</a></li>
+                        <li><a href="#consultation">مراجعة ما قبل الامتحان</a></li>
+                    </ul>
+                </nav>
+
+                <div class="auth-actions" style="display: flex; gap: 6px; align-items: center;">
+                    <!-- زر تسجيل الخروج للطالب -->
+                    <button type="button" onclick="logoutUser()" style="padding: 5px 10px; background: #ef4444; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.75rem;">خروج</button>
+                </div>
+
+                <div class="menu-toggle" id="mobile-menu">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- قسم الصفحة الرئيسية -->
+        <section id="home" class="hero-section">
+            <div class="container hero-content" style="display: block; text-align: center;">
+                <div class="hero-text" style="max-width: 800px; margin: 0 auto;">
+                    <h1>أهلاً بكم في موقع <span class="highlight">عمر يحلّه</span></h1>
+                    <p>منصتكم المخصصة لشرح وتبسيط منهج الرياضيات للثانوية العامة (الصف الثاني عشر - علمي وتكنولوجي) وفقاً للمنهج القطري.</p>
+                    <div class="hero-buttons" style="justify-content: center; display: flex; gap: 15px; margin-top: 20px;">
+                        <a href="#paid-course" class="btn primary-btn">احجز الدورة الشاملة</a>
+                        <a href="https://www.youtube.com/@OmarMathematics-u3b" target="_blank" class="btn youtube-btn">
+                            <i class="fa-brands fa-youtube"></i> زيارة القناة الرسمية
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم دورة الرياضيات للثانوية العامة (المأجورة مع عرض الخصم) -->
+        <section id="paid-course" class="section bg-light">
+            <div class="container">
+                <h2 class="section-title">دورة الرياضيات للثانوية العامة</h2>
+                <p class="section-subtitle">استعد لاختباراتك بقوة مع الشرح المكثف والحلول النموذجية للمنهج بالكامل</p>
+                
+                <div class="paid-courses-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    
+                    <!-- الفصل الأول (متاح مع عرض الخصم 50%) -->
+                    <div class="paid-course-card" style="border: 2px solid #ef4444; position: relative;">
+                        <div class="course-badge" style="background-color: #ef4444;">خصم 50% - لفترة أسبوع!</div>
+                        <div class="course-content">
+                            <h3>الدورة الشاملة - الفصل الأول (12 علمي وتكنولوجي)</h3>
+                            <p class="course-description">تشمل الدورة شرحاً مفصلاً لكافة الوحدات، تجميعات لأهم الأسئلة المتوقعة، وطرق حل المشكلات الرياضية بأسهل الطرق الممكنة.</p>
+                            
+                            <ul class="course-features">
+                                <li><i class="fa-solid fa-check-circle"></i> شرح كامل ومبسط لجميع دروس منهج الفصل الأول</li>
+                                <li><i class="fa-solid fa-check-circle"></i> حل نماذج اختبارات سابقة وتدريبات مكثفة</li>
+                                <li><i class="fa-solid fa-check-circle"></i> متابعة ودعم مستمر للإجابة على جميع الاستفسارات</li>
+                            </ul>
+
+                            <div class="price-box" style="margin: 15px 0; padding: 10px; background: #fff5f5; border-radius: 8px; text-align: center;">
+                                <span class="price-label" style="display: block; font-size: 0.85rem; color: #64748b;">سعر الاشتراك لفترة محدودة:</span>
+                                <div>
+                                    <span style="text-decoration: line-through; color: #94a3b8; font-size: 1rem; margin-left: 10px;">120 ر.ق</span>
+                                    <span class="price-value" style="color: #ef4444; font-size: 1.5rem; font-weight: bold;">60 ر.ق</span>
+                                </div>
+                            </div>
+
+                            <a href="#" id="subscribeBtn" class="btn primary-btn full-width" style="background-color: #ef4444;">
+                                <i class="fa-brands fa-whatsapp"></i> اشترك الآن بعرض النصف (60 ريال فقط)
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- الفصل الثاني (مغلق) -->
+                    <div class="paid-course-card locked-card" style="opacity: 0.8; position: relative;">
+                        <div class="course-badge" style="background-color: #6c757d;">الفصل الثاني</div>
+                        <div class="course-content">
+                            <h3>الدورة الشاملة - الفصل الثاني (12 علمي وتكنولوجي)</h3>
+                            <p class="course-description">سيتم فتح التسجيل في الدورة الشاملة لشرح منهج الفصل الثاني في موعده المحدد.</p>
+                            
+                            <ul class="course-features">
+                                <li><i class="fa-solid fa-lock"></i> شرح كامل ومبسط لدورة الفصل الثاني</li>
+                                <li><i class="fa-solid fa-lock"></i> نماذج واختبارات متوقعة</li>
+                                <li><i class="fa-solid fa-lock"></i> متابعة ومراجعة مكثفة</li>
+                            </ul>
+
+                            <div class="price-box" style="filter: blur(1px); margin: 15px 0; padding: 10px; background: #f8f9fa; border-radius: 8px; text-align: center;">
+                                <span class="price-label">سعر الاشتراك:</span>
+                                <span class="price-value">-- ر.ق</span>
+                            </div>
+
+                            <button class="btn disabled-btn full-width" disabled style="background-color: #6c757d; color: #fff; cursor: not-allowed; border: none; padding: 12px; width: 100%; border-radius: 5px; font-weight: bold;">
+                                <i class="fa-solid fa-lock"></i> التسجيل مغلق حالياً (قريباً)
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم كورسات رياضيات (المجانية) -->
+        <section id="courses" class="section">
+            <div class="container">
+                <h2 class="section-title">كورسات رياضيات المجانية</h2>
+                <p class="section-subtitle">شاهد أحدث شروحات منهج الصف 12 علمي وتكنولوجي مباشرة من قناتي على يوتيوب</p>
+                
+                <div class="term-tabs" style="display: flex; justify-content: center; gap: 15px; margin-bottom: 30px;">
+                    <button class="term-tab active" style="padding: 10px 25px; border-radius: 25px; border: 2px solid #007bff; background: #007bff; color: white; cursor: pointer; font-weight: bold;">
+                        <i class="fa-solid fa-book-open"></i> الفصل الأول
+                    </button>
+                    <button class="term-tab disabled" style="padding: 10px 25px; border-radius: 25px; border: 2px solid #ccc; background: #e9ecef; color: #6c757d; cursor: not-allowed; font-weight: bold;" title="مغلق حالياً">
+                        <i class="fa-solid fa-lock"></i> الفصل الثاني (مغلق)
+                    </button>
+                </div>
+
+                <div class="courses-grid" id="youtube-videos-container">
+                    <div class="course-card">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/fH0p58o2VGY" title="شرح منهج الرياضيات - عمر يحلّه" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="course-info">
+                            <h3>😲 التكامل غير المحدود… أسهل مما تتخيل! #1</h3>
+                            <p>شرح تفصيلي ومبسط لتكامل غير المحدود وقواعده الأساسية.</p>
+                            <a href="https://youtu.be/fH0p58o2VGY" target="_blank" class="watch-link">شاهد على يوتيوب <i class="fa-solid fa-arrow-left"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/4fLWk6EayRw" title="شرح منهج الرياضيات - عمر يحلّه" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="course-info">
+                            <h3>شرح شامل لقواعد تكامل الدالة الأسية e | رياضيات</h3>
+                            <p>فهم وتطبيق قواعد تكامل الدوال الأسية (الأساس الطبيعي e).</p>
+                            <a href="https://youtu.be/4fLWk6EayRw" target="_blank" class="watch-link">شاهد على يوتيوب <i class="fa-solid fa-arrow-left"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/pLQZ_gCFRjs" title="شرح منهج الرياضيات - عمر يحلّه" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="course-info">
+                            <h3>التكامل بالتعويض… الحل الذكي للمسائل المعقّدة 🔥</h3>
+                            <p>طريقة التكامل بالتعويض والتعامل مع الجذور والأسس بذكاء.</p>
+                            <a href="https://youtu.be/pLQZ_gCFRjs" target="_blank" class="watch-link">شاهد على يوتيوب <i class="fa-solid fa-arrow-left"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/E6wJ9TZ4y-w" title="شرح منهج الرياضيات - عمر يحلّه" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="course-info">
+                            <h3>!! تكامل بالتعويض - الدوال المثلثية</h3>
+                            <p>تطبيق التكامل بالتعويض على الدوال المثلثية مثل السان والتان.</p>
+                            <a href="https://youtu.be/E6wJ9TZ4y-w" target="_blank" class="watch-link">شاهد على يوتيوب <i class="fa-solid fa-arrow-left"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/xeaS8W_GLe0" title="شرح منهج الرياضيات - عمر يحلّه" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="course-info">
+                            <h3>التكامل بالأجزاء… مش صعب زي ما تتخيل!</h3>
+                            <p>شرح مبسط لقاعدة التكامل بالأجزاء وحاصل ضرب دالتين.</p>
+                            <a href="https://youtu.be/xeaS8W_GLe0" target="_blank" class="watch-link">شاهد على يوتيوب <i class="fa-solid fa-arrow-left"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/Cl9cBI_BcYg" title="شرح منهج الرياضيات - عمر يحلّه" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="course-info">
+                            <h3>درس التكامل بالأجزاء بطريقة ذكية 😎</h3>
+                            <p>استخدام طريقة الجدول لحل مسائل التكامل بالأجزاء للدوال المثلثية.</p>
+                            <a href="https://youtu.be/Cl9cBI_BcYg" target="_blank" class="watch-link">شاهد على يوتيوب <i class="fa-solid fa-arrow-left"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/vco1EWeFXxw" title="شرح منهج الرياضيات - عمر يحلّه" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="course-info">
+                            <h3>حل مسائل عن الوحدة الرابعة تكامل الغير محدود #1</h3>
+                            <p>مراجعة وحل مجموعة من المسائل المتنوعة على الوحدة الرابعة.</p>
+                            <a href="https://youtu.be/vco1EWeFXxw" target="_blank" class="watch-link">شاهد على يوتيوب <i class="fa-solid fa-arrow-left"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم حل امتحانات سابقة -->
+        <section id="exams" class="section bg-light">
+            <div class="container text-center">
+                <h2 class="section-title">حل امتحانات سابقة</h2>
+                <p class="section-subtitle">نماذج اختبارات قطر الوطنية السابقة محلولة ومفصلة خطوة بخطوة</p>
+                
+                <div class="coming-soon-box">
+                    <i class="fa-solid fa-hourglass-half fa-3x"></i>
+                    <h3>قريباً جداً</h3>
+                    <p>سيتم تفعيل هذا القسم ورفع فيديوهات حل الامتحانات وتجميعات الأسئلة في فترة الامتحانات القادمة، تابعونا!</p>
+                    <button class="btn primary-btn" disabled>قريباً في فترة الامتحانات</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم مراجعة ما قبل الامتحان وطلب الاستشارة -->
+        <section id="consultation" class="section">
+            <div class="container">
+                <div class="consultation-wrapper">
+                    <div class="consultation-info">
+                        <h2>مراجعة ما قبل الامتحان</h2>
+                        <p>هل لديك أسئلة صعبة لم تفهمها؟ هل تحتاج لمراجعة نهائية مركزة قبل دخول اختبار الرياضيات؟</p>
+                        <ul class="features-list">
+                            <li><i class="fa-solid fa-check"></i> إجابات سريعة ومخصصة لأسئلتك</li>
+                            <li><i class="fa-solid fa-check"></i> تجميعات أهم المسائل المتوقعة</li>
+                            <li><i class="fa-solid fa-check"></i> دعم كامل لمنهج قطر (علمي وتكنولوجي)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="consultation-form-card">
+                        <h3>اطلب استشارة أو مساعدة في سؤال</h3>
+                        <form id="consultForm">
+                            <div class="form-group">
+                                <label for="name">الاسم الكامل</label>
+                                <input type="text" id="name" required placeholder="أدخل اسمك هنا">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">رقم الهاتف</label>
+                                <input type="tel" id="phone" required placeholder="رقم الهاتف">
+                            </div>
+                            <button type="submit" class="btn primary-btn full-width">إرسال الطلب عبر الواتساب</button>
+                            <p id="formMessage" class="form-message" style="display: none;"></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- التذييل -->
+        <footer>
+            <div class="container footer-content">
+                <p>جميع الحقوق محفوظة &copy; 2026 - Omar Y7elha | عمر يحلّه</p>
+                <div class="social-links">
+                    <a href="https://www.youtube.com/@OmarMathematics-u3b" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- كود الجافاسكريبت لإدارة حالة قفل الموقع والتحقق عبر Firebase -->
+    <script>
+        // التبديل بين نموذج تسجيل الدخول وحساب جديد في النافذة الإجبارية
+        function switchMandatoryTab(mode) {
+            const nameContainer = document.getElementById('mandNameContainer');
+            const submitBtn = document.getElementById('mandSubmitBtn');
+            const tabLogin = document.getElementById('tabLoginBtn');
+            const tabRegister = document.getElementById('tabRegisterBtn');
+
+            if (mode === 'login') {
+                nameContainer.style.display = 'none';
+                submitBtn.textContent = 'تسجيل الدخول';
+                submitBtn.dataset.mode = 'login';
+                tabLogin.style.background = '#007bff';
+                tabLogin.style.color = 'white';
+                tabRegister.style.background = 'transparent';
+                tabRegister.style.color = '#64748b';
+            } else {
+                nameContainer.style.display = 'block';
+                submitBtn.textContent = 'إرسال رمز التحقق والتسجيل';
+                submitBtn.dataset.mode = 'register';
+                tabRegister.style.background = '#007bff';
+                tabRegister.style.color = 'white';
+                tabLogin.style.background = 'transparent';
+                tabLogin.style.color = '#64748b';
+            }
+        }
+
+        // مراقبة حالة المصادقة عبر Firebase
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // الطالب مسجل الدخول، فك القفل وإظهار الموقع
+                document.body.classList.remove('locked-body');
+                document.body.classList.add('logged-in');
+                document.getElementById('mandatoryAuthModal').style.display = 'none';
+            } else {
+                // الطالب غير مسجل الدخول، إبقاء القفل مفعلاً
+                document.body.classList.add('locked-body');
+                document.body.classList.remove('logged-in');
+                document.getElementById('mandatoryAuthModal').style.display = 'flex';
+            }
+        });
+
+        // زر التخطي المؤقت للتجارب المحلية
+        function bypassLoginForTesting() {
+            document.body.classList.remove('locked-body');
+            document.body.classList.add('logged-in');
+            document.getElementById('mandatoryAuthModal').style.display = 'none';
+        }
+
+        // زر تسجيل الخروج
+        function logoutUser() {
+            auth.signOut().then(() => {
+                location.reload();
+            });
+        }
+    </script>
+
+    <!-- الربط مع ملف script.js الأساسي -->
     <script src="script.js"></script>
 </body>
 </html>
