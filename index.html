@@ -152,7 +152,10 @@
                     </ul>
                 </nav>
 
-                <div class="auth-actions" style="display: flex; gap: 6px; align-items: center;">
+                <div class="auth-actions" style="display: flex; gap: 10px; align-items: center;">
+                    <!-- عنصر عرض اسم المستخدم في الزاوية -->
+                    <span id="userNameDisplay" style="font-size: 0.85rem; font-weight: bold; color: #1e293b; background: #f1f5f9; padding: 4px 10px; border-radius: 6px;"></span>
+                    
                     <!-- زر تسجيل الخروج للطالب -->
                     <button type="button" onclick="logoutUser()" style="padding: 5px 10px; background: #ef4444; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.75rem;">خروج</button>
                 </div>
@@ -179,7 +182,7 @@
             </div>
         </section>
 
-        <!-- قسم دورة الرياضيات للثانوية العامة (المأجورة مع عرض الخصم) -->
+        <!-- قسم دورة الرياضيات للثانوية العامة (المأجورة) -->
         <section id="paid-course" class="section bg-light">
             <div class="container">
                 <h2 class="section-title">دورة الرياضيات للثانوية العامة</h2>
@@ -187,9 +190,9 @@
                 
                 <div class="paid-courses-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
                     
-                    <!-- الفصل الأول (متاح مع عرض الخصم 50%) -->
-                    <div class="paid-course-card" style="border: 2px solid #ef4444; position: relative;">
-                        <div class="course-badge" style="background-color: #ef4444;">خصم 50% - لفترة أسبوع!</div>
+                    <!-- الفصل الأول (متاح) -->
+                    <div class="paid-course-card">
+                        <div class="course-badge">الفصل الأول</div>
                         <div class="course-content">
                             <h3>الدورة الشاملة - الفصل الأول (12 علمي وتكنولوجي)</h3>
                             <p class="course-description">تشمل الدورة شرحاً مفصلاً لكافة الوحدات، تجميعات لأهم الأسئلة المتوقعة، وطرق حل المشكلات الرياضية بأسهل الطرق الممكنة.</p>
@@ -200,16 +203,13 @@
                                 <li><i class="fa-solid fa-check-circle"></i> متابعة ودعم مستمر للإجابة على جميع الاستفسارات</li>
                             </ul>
 
-                            <div class="price-box" style="margin: 15px 0; padding: 10px; background: #fff5f5; border-radius: 8px; text-align: center;">
-                                <span class="price-label" style="display: block; font-size: 0.85rem; color: #64748b;">سعر الاشتراك لفترة محدودة:</span>
-                                <div>
-                                    <span style="text-decoration: line-through; color: #94a3b8; font-size: 1rem; margin-left: 10px;">120 ر.ق</span>
-                                    <span class="price-value" style="color: #ef4444; font-size: 1.5rem; font-weight: bold;">60 ر.ق</span>
-                                </div>
+                            <div class="price-box">
+                                <span class="price-label">سعر الاشتراك:</span>
+                                <span class="price-value">120 ر.ق</span>
                             </div>
 
-                            <a href="#" id="subscribeBtn" class="btn primary-btn full-width" style="background-color: #ef4444;">
-                                <i class="fa-brands fa-whatsapp"></i> اشترك الآن بعرض النصف (60 ريال فقط)
+                            <a href="#" id="subscribeBtn" class="btn primary-btn full-width">
+                                <i class="fa-brands fa-whatsapp"></i> اشترك الآن في الفصل الأول (120 ريال)
                             </a>
                         </div>
                     </div>
@@ -227,7 +227,7 @@
                                 <li><i class="fa-solid fa-lock"></i> متابعة ومراجعة مكثفة</li>
                             </ul>
 
-                            <div class="price-box" style="filter: blur(1px); margin: 15px 0; padding: 10px; background: #f8f9fa; border-radius: 8px; text-align: center;">
+                            <div class="price-box" style="filter: blur(1px);">
                                 <span class="price-label">سعر الاشتراك:</span>
                                 <span class="price-value">-- ر.ق</span>
                             </div>
@@ -342,7 +342,7 @@
         <section id="exams" class="section bg-light">
             <div class="container text-center">
                 <h2 class="section-title">حل امتحانات سابقة</h2>
-                <p class="section-subtitle">نماذج اختبارات قطر الوطنية السابقة محلولة ومفصلة خطوة بخطوة</p>
+                <p class="section-subtitle">نماذج اختبارات قطر الوطنية السابقة محلوحة ومفصلة خطوة بخطوة</p>
                 
                 <div class="coming-soon-box">
                     <i class="fa-solid fa-hourglass-half fa-3x"></i>
@@ -426,18 +426,26 @@
             }
         }
 
-        // مراقبة حالة المصادقة عبر Firebase
+        // مراقبة حالة المصادقة عبر Firebase وعرض اسم المستخدم تلقائياً
         auth.onAuthStateChanged((user) => {
+            const nameDisplay = document.getElementById('userNameDisplay');
             if (user) {
                 // الطالب مسجل الدخول، فك القفل وإظهار الموقع
                 document.body.classList.remove('locked-body');
                 document.body.classList.add('logged-in');
                 document.getElementById('mandatoryAuthModal').style.display = 'none';
+                
+                // جلب وعرض اسم المستخدم (من بروفايل فايربيس أو الإيميل أو التخطي)
+                let displayName = user.displayName || (user.email ? user.email.split('@')[0] : 'طالب');
+                nameDisplay.textContent = `مرحباً، ${displayName}`;
+                nameDisplay.style.display = 'inline-block';
             } else {
                 // الطالب غير مسجل الدخول، إبقاء القفل مفعلاً
                 document.body.classList.add('locked-body');
                 document.body.classList.remove('logged-in');
                 document.getElementById('mandatoryAuthModal').style.display = 'flex';
+                nameDisplay.textContent = '';
+                nameDisplay.style.display = 'none';
             }
         });
 
@@ -446,6 +454,8 @@
             document.body.classList.remove('locked-body');
             document.body.classList.add('logged-in');
             document.getElementById('mandatoryAuthModal').style.display = 'none';
+            document.getElementById('userNameDisplay').textContent = 'مرحباً، زائر تجريبي';
+            document.getElementById('userNameDisplay').style.display = 'inline-block';
         }
 
         // زر تسجيل الخروج

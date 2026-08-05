@@ -213,7 +213,7 @@ if (subscribeBtn) {
     subscribeBtn.addEventListener('click', function(e) {
         e.preventDefault();
         const phoneNumber = "97450137538"; 
-        const text = "مرحباً يا استاذ عمر، أرغب في الاشتراك في الدورة الشاملة للفصل الأول (60 ريال قطري).";
+        const text = "مرحباً يا استاذ عمر، أرغب في الاشتراك في الدورة الشاملة للفصل الأول (120 ريال قطري).";
         const encodedURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(text)}`;
         window.open(encodedURL, '_blank');
     });
